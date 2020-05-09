@@ -1,0 +1,13 @@
+</div style="margin-bottom: 100px;">
+    Done:
+<div>
+<%@interview_participants.each do |interview_participant|%>
+    <% @participant = Participant.find(interview_participant.participant_id) %>
+    <%= @participant.name%>
+    <br>
+<%end%>
+
+<%= link_to 'Edit the interview', edit_interview_url(@interview.id) %>
+<%= link_to 'Delete interview', method: :delete, data: { confirm: 'Are you sure?' } %>
+<%= link_to 'Back', :home_index %>
+

@@ -1,0 +1,15 @@
+<%= form_for @interview do |f| %>
+  <%= f.label :start_time %><br>
+  <%= f.datetime_select :start_time %><br>
+  <br>
+  <%= f.label :end_time %><br>
+  <%= f.datetime_select :end_time %>
+  <br>
+  <label for="participants">Participants</label>
+  <br>
+  <input id="participants" name="participants" type="text" placeholder ="Add participants ids separated by ,"/><br />
+  <br>
+  <%=f.submit%>
+<% end %> 
+
+<%= link_to 'Back', :home_index %>
