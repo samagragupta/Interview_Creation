@@ -25,9 +25,9 @@ Things you may want to cover:
 
 # Screenshots
 
-![](./screenshots/1.jpg)
-![](./screenshots/2.jpg)
-![](./screenshots/3.jpg)
-![](./screenshots/4.jpg)
-![](./screenshots/5.jpg)
+![](/screenshots/1.JPG)
+![](/screenshots/2.JPG)
+![](/screenshots/3.JPG)
+![](/screenshots/4.JPG)
+![](/screenshots/5.JPG)
 
