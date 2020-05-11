@@ -1,7 +1,7 @@
 <% @interview.errors.each do |error|%>
   <%= error%>
 <% end %>
-<%= form_for @interview do |f| %>
+<%= form_for(@interview, remote: true) do |f| %>
   <%= f.label :start_time %><br>
   <%= f.datetime_select :start_time %><br>
   <br>
