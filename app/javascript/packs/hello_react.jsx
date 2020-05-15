@@ -4,10 +4,13 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+// import HelloWorld from '../bundles/HelloWorld'
+import App from '../bundles/HelloWorld/components/App'
 import PropTypes from 'prop-types'
 
 const Hello = props => (
-  <div>Hello {props.name}!</div>
+  <div>Hellofhsga {props.name}!</div>
 )
 
 Hello.defaultProps = {
@@ -20,7 +23,10 @@ Hello.propTypes = {
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Hello name="React" />,
+    // <Hello name="React" />,
+    <Router>
+      <Route path="/" component={App} />
+    </Router>,
     document.body.appendChild(document.createElement('div')),
   )
 })

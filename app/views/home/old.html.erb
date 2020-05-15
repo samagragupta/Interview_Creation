@@ -1,0 +1,43 @@
+<div>
+    Hello
+</div>
+    <%= javascript_pack_tag 'hello_react' %>
+
+<div>
+    <%= link_to 'Create participants', :participants %>
+</div>
+<div>
+    <%= link_to 'Create interview', :new_interview  %>
+</div>
+
+<div style="margin-top: 100px;">All participants</div>
+<div>
+    <% @participants.each do |participant|%>
+        <div>
+            <div>
+                Id:  <%= participant.id%>
+            </div>
+            <div>
+                name:  <%= participant.name %>
+            </div>
+            <div>
+                email:  <%= participant.email %>
+            </div>
+        </div>
+    <% end %>
+</div>
+
+<div style="margin-top: 100px;">All interview:</div>
+<div>
+    <% @interviews.each do |interview|%>
+        <div>
+            <div>
+                <%= interview.id%>
+            <%= interview.start_time.to_formatted_s(:long_ordinal)%>  to <%= interview.end_time.to_formatted_s(:long_ordinal)%> 
+            </div>
+            <div style="margin-bottom: 100px;">
+                <%= link_to 'Go to the interview', interview_path(interview.id) %>
+            </div>
+        </div>
+    <% end %>
+</div>

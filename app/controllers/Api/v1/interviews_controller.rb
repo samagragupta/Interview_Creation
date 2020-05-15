@@ -1,31 +1,55 @@
 require 'date'
-class InterviewsController < ApplicationController
-	def new
-		@interview = Interview.new
+class Api::V1::InterviewsController < ApplicationController
+  # protect_from_forgery with: :null_session
+  # protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token
+  # skip_before_filter :verify_authenticity_/token 
+  # skip_before_action :verify_authenticity_token
+
+	def index
+    @interview = Interview.all
+    
+    render json: @interview
 	end
+	# def new
+	# 	@interview = Interview.new
+	# end
 	def show
     @interview = Interview.find(params[:id])
-    @interview_participants = InterviewParticipant.where(interview_id: params[:id])
+    interview_participants = InterviewParticipant.where(interview_id: params[:id])
+    # render json: @interview , include: :interview_participants
+    render json: interview_participants
   end
 
   def edit
     @interview = Interview.find(params[:id])
   end
 
-  def delete
-    @interview = Interview.find(params[:id])
-    @interview.destroy
+  def destroy
+    @interview_participants = InterviewParticipant.where(interview_id: params[:id]).destroy_all
+    @interview = Interview.find(params[:id]).destroy
+    # @interview_participants.destroy(params[:id])
+    # @interview.destroy(params[:id])
 
-    redirect_to home_index
+    render json: @interview
+    # redirect_to home_index
   end
+
+
+  # def create 
+  #   @interview = Interview.create(interview_params)
+
+  #   render json: @interview
+  # end
 
   def create
     @pass = 1
-		@start_time = DateTime.new(params["interview"][:"start_time(1i)"].to_i,params["interview"][:"start_time(2i)"].to_i,params["interview"][:"start_time(3i)"].to_i,params["interview"][:"start_time(4i)"].to_i,params["interview"][:"start_time(5i)"].to_i,0)
-		@end_time = DateTime.new(params["interview"][:"end_time(1i)"].to_i,params["interview"][:"end_time(2i)"].to_i,params["interview"][:"end_time(3i)"].to_i,params["interview"][:"end_time(4i)"].to_i,params["interview"][:"end_time(5i)"].to_i,0)
+		# @start_time = DateTime.new(params["interview"][:"start_time(1i)"].to_i,params["interview"][:"start_time(2i)"].to_i,params["interview"][:"start_time(3i)"].to_i,params["interview"][:"start_time(4i)"].to_i,params["interview"][:"start_time(5i)"].to_i,0)
+		# @end_time = DateTime.new(params["interview"][:"end_time(1i)"].to_i,params["interview"][:"end_time(2i)"].to_i,params["interview"][:"end_time(3i)"].to_i,params["interview"][:"end_time(4i)"].to_i,params["interview"][:"end_time(5i)"].to_i,0)
   
-  
-		participants = params["participants"].split(",")
+    @start_time =  params[:start_time]
+    @end_time =  params[:end_time]
+		participants = params[:participants].split(",")
     participant_interviews = []
     participant_interview_times = []
     participants.each do |participant|
@@ -57,19 +81,19 @@ class InterviewsController < ApplicationController
         # InterviewParticipantMailer.welcome_email(interview_participants).deliver_now
       end
       puts(@pass)
-      redirect_to interview_url(@interview.id)
+      render json: @interview
+      # redirect_to interview_url(@interview.id)
     else
-      redirect_to new_interview_url()
+      
+      redirect_to '/'
     end
   end
   
   def update
     @pass = 1
-		@start_time = DateTime.new(params["interview"][:"start_time(1i)"].to_i,params["interview"][:"start_time(2i)"].to_i,params["interview"][:"start_time(3i)"].to_i,params["interview"][:"start_time(4i)"].to_i,params["interview"][:"start_time(5i)"].to_i,0)
-		@end_time = DateTime.new(params["interview"][:"end_time(1i)"].to_i,params["interview"][:"end_time(2i)"].to_i,params["interview"][:"end_time(3i)"].to_i,params["interview"][:"end_time(4i)"].to_i,params["interview"][:"end_time(5i)"].to_i,0)
-  
-  
-		participants = params["participants"].split(",")
+    @start_time =  params[:start_time]
+    @end_time =  params[:end_time]
+		participants = params[:participants].split(",")
     participant_interviews = []
     participant_interview_times = []
     participants.each do |participant|
@@ -121,7 +145,10 @@ class InterviewsController < ApplicationController
   end
 
 
-
+  private
+  def interview_params
+      params.require(:interview).permit(:start_time, :end_time)
+  end
 
   # after_action :reminder_send, only: [:update]
   # def reminder_send
