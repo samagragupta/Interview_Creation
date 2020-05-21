@@ -8,7 +8,8 @@ class ParticipantsController < ApplicationController
     end
 
     def create
-		@participant = Participant.create(participant_params)
+        @participant = Participant.create_participant(participant_params)
+        @participant.save
         redirect_to participant_url(@participant.id)
     end
 
