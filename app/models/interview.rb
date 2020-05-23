@@ -1,6 +1,12 @@
 class Interview < ApplicationRecord
     has_many :interview_participants, dependent: :destroy
     has_many :participants, through: :interview_participants
+    after_create :reminding 
+    after_update :reminding 
+
+    def reminding
+        InterviewMailer.remind_mail(self).deliver_later(wait_until: (self.start_time - Time.now - 30.minutes).seconds.from_now)
+    end
 
     def self.check_clash(start_time, end_time, participants)
         participant_interviews = []
