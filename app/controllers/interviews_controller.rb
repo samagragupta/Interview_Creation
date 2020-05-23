@@ -26,7 +26,8 @@ class InterviewsController < ApplicationController
 
 		participants = params["participants"].split(",")
 
-    
+    @pass = Interview.check_clash(@start_time, @end_time, participants)
+
     if @pass == 1
       @interview = Interview.create(start_time: @start_time,end_time: @end_time)
       
@@ -49,13 +50,12 @@ class InterviewsController < ApplicationController
   
 		participants = params["participants"].split(",")
 
-    
+    @pass = Interview.check_clash(@start_time, @end_time, participants)
     
     
     if @pass == 1
       @interview = Interview.update(start_time: @start_time,end_time: @end_time)
       participants.each do |participant|
-        @interview_participants = InterviewParticipant.where(interview_id: params[:id])
         interview_participants = InterviewParticipant.where(interview_id: params[:id]).update(participant_id: participant)
         @participantt = Participant.where(id: participant).first
         InterviewMailer.reminder_send(@participantt).deliver_now
