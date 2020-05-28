@@ -1,26 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
-export default class EditInterview extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            start_time: '',
-            end_time: '',
-            participants: '',
-            // interview_id: [],
-            // interview_start: [],
-            // interview_end: [],
+const EditInterview = (props) => {
+
+    const [start_time, setStartTime] = useState()
+    const [end_time, setEndTime] = useState()
+    const [participants, setparticipants] = useState()
+
+
+    const handleInputChange = (event) => {
+        if (event.target.name === "start_time") {
+            setStartTime(event.target.value)
+        }
+        else if (event.target.name === "end_time") {
+            setEndTime(event.target.value)
+        }
+        else if (event.target.name === "participants") {
+            setparticipants(event.target.value)
         }
     }
 
-    handleInputChange = (event) => {
-        this.setState({ [event.target.name]: event.target.value });
-    }
 
-
-
-    createPostRequest = (event) => {
+    async function createPostRequest(event) {
 
         async function postData(url = '', data = {}) {
             const response = await fetch(url, {
@@ -33,50 +34,48 @@ export default class EditInterview extends React.Component {
             return response.json();
         }
 
-        const { match: { params: { id } } } = this.props;
+        const { match: { params: { id } } } = props;
 
         postData(`/api/v1/interviews/${id}`, {
-            start_time: this.state.start_time, end_time: this.state.end_time, participants: this.state.participants
+            start_time: start_time, end_time: end_time, participants: participants
         }).then(res => { console.log(res) });
 
 
-
     }
 
-    render() {
-        const { start_time, end_time, participants } = this.state;
-        return (
+    return (
+        <div>
+            <h3>Edit Interview</h3>
             <div>
-                <h3>Edit Interview</h3>
-                <div>
-                    <label>Participants: </label>
-                    <input
-                        type='text'
-                        name='participants'
-                        value={participants}
-                    onChange={this.handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>start_time: </label>
-                    <input
-                        type='datetime-local'
-                        name='start_time'
-                        value={start_time}
-                        onChange={this.handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>end_time: </label>
-                    <input
-                        type='datetime-local'
-                        name='end_time'
-                        value={end_time}
-                        onChange={this.handleInputChange}
-                    />
-                </div>
-                <button onClick={this.createPostRequest}>Update</button>
+                <label>Participants: </label>
+                <input
+                    type='text'
+                    name='participants'
+                    value={participants}
+                    onChange={handleInputChange}
+                />
             </div>
-        );
-    }
+            <div>
+                <label>start_time: </label>
+                <input
+                    type='datetime-local'
+                    name='start_time'
+                    value={start_time}
+                    onChange={handleInputChange}
+                />
+            </div>
+            <div>
+                <label>end_time: </label>
+                <input
+                    type='datetime-local'
+                    name='end_time'
+                    value={end_time}
+                    onChange={handleInputChange}
+                />
+            </div>
+            <button onClick={createPostRequest}>Update</button>
+        </div>
+    );
 }
+
+export default EditInterview;
