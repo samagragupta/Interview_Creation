@@ -8,25 +8,18 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 // import HelloWorld from '../bundles/HelloWorld'
 import App from '../bundles/HelloWorld/components/App'
 import PropTypes from 'prop-types'
+import {createStore, applyMiddleware} from 'redux';
+import {Provider} from "react-redux";
+import thunk from "redux-thunk";
+import reducers from "../bundles/HelloWorld/reducers/index.js";
 
-const Hello = props => (
-  <div>Hellofhsga {props.name}!</div>
-)
+let store = createStore(reducers, applyMiddleware(thunk))
 
-Hello.defaultProps = {
-  name: 'David'
-}
-
-Hello.propTypes = {
-  name: PropTypes.string
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     // <Hello name="React" />,
-    <Router>
-      <Route path="/" component={App} />
-    </Router>,
+    <Provider store={store}><App /></Provider>,
     document.body.appendChild(document.createElement('div')),
   )
 })

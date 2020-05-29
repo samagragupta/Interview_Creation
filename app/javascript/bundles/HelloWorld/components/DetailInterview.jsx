@@ -1,35 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import {fetchInterview} from '../actions/interviewActions'
 
 const DetailInterview = (props) => {
-  const [participants, setparticipants] = useState([])
-  const [interviews, setinterviews] = useState([])
 
-  // console.log("part: ", participants);
-  // console.log("interviews: ", interviews);
+  const { dispatch, state, stateinterview, loading, interviews, hasErrors } = props;
 
+  console.log('state',state);
+  console.log('stateinterview',stateinterview);
+
+  console.log("test interview",interviews)
   useEffect(() => {
-    console.log('start')
-    fetchParticipantsList();
-    fetchInterviewsList();
-    console.log('end')
-  }, []);
-
-  async function fetchParticipantsList() {
-    await fetch('/api/v1/participants').
-      then((response) => response.json()).
-      then((participants) => setparticipants({ participants }));
-  };
-
-  async function fetchInterviewsList() {
     const { match: { params: { id } } } = props;
-    await fetch(`/api/v1/interviews/${id}`).
-      then((response) => response.json()).
-      then((interviews) => setinterviews(interviews));
+    dispatch(fetchInterview(id))
+  }, [dispatch])
 
-    console.log("sa", interviews)
-  };
-
-  const interviewslist = interviews
 
   console.log('interview: ', interviews)
 
@@ -50,7 +35,7 @@ const DetailInterview = (props) => {
             console.log('interviews:sad ', interviews)
           }
           {
-            interviews.map((interview) => {
+            interviews? interviews.map((interview) => {
               console.log('sadassad',interview)
               console.log('sadaghahhgsghssad',interviews)
               return (
@@ -64,8 +49,8 @@ const DetailInterview = (props) => {
                   </td>
                   <td>{interview.created_at}</td>
                 </tr>
-              )
-            })
+              ) 
+            }) : null
           }
         </tbody>
       </table>
@@ -73,4 +58,13 @@ const DetailInterview = (props) => {
   );
 }
 
-export default DetailInterview;
+// export default DetailInterview;
+
+const mapStateToProps = state => ({
+  loading: state.interview.loading,
+  interviews: state.interview.interview,
+  hasErrors: state.interview.hasErrors,
+  state: state,
+  stateinterview: state.interview,
+})
+export default connect(mapStateToProps)(DetailInterview)

@@ -1,18 +1,35 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { fetchInterviewList } from '../actions/interviewlistActions'
+import {fetchParticipant} from '../actions/participantActions'
 
-const HelloWorld = () => {
+const HelloWorld = (props) => {
 
-  const [participants, setparticipants] = useState([])
-  const [interviews, setinterviews] = useState([])
+  // const [participants, setparticipants] = useState([])
+  // const [interviews, setinterviews] = useState([])
+
+  const { dispatch, interviews, participants } = props;
+
+  // useEffect(() => {
+  //   console.log('start')
+  //   fetchParticipantsList();
+  //   fetchInterviewsList();
+  //   console.log('end')
+  // }, []);
+
+  // console.log('interviewlist',interviews)
+  // console.log('state',state)
+  // console.log('statelist',statelist)
+  // console.log('statepart',statepart)
+  // console.log('participants',participants)
 
   useEffect(() => {
-    console.log('start')
-    fetchParticipantsList();
-    fetchInterviewsList();
-    console.log('end')
-  }, []);
+    // const { match: { params: { id } } } = props;
+    dispatch(fetchInterviewList())
+    dispatch(fetchParticipant())
+  }, [dispatch])
 
 
   async function fetchParticipantsList() {
@@ -49,7 +66,7 @@ const HelloWorld = () => {
         </thead>
         <tbody>
           {
-            participants.map((participant) => {
+            participants? participants.map((participant) => {
               return (
                 <tr key={participant.id}>
                   <td>{participant.name}</td>
@@ -62,7 +79,7 @@ const HelloWorld = () => {
                   <td>'Yes'</td>
                 </tr>
               )
-            })
+            }) : null
           }
         </tbody>
       </table>
@@ -78,7 +95,7 @@ const HelloWorld = () => {
         </thead>
         <tbody>
           {
-            interviews.map((interview) => {
+            interviews? interviews.map((interview) => {
               return (
                 <tr key={interview.id}>
                   <td>{interview.start_time}</td>
@@ -105,7 +122,7 @@ const HelloWorld = () => {
                   </td>
                 </tr>
               )
-            })
+            }) : null
           }
         </tbody>
       </table>
@@ -113,4 +130,8 @@ const HelloWorld = () => {
   );
 }
 
-export default HelloWorld;
+const mapStateToProps = state => ({
+  participants: state.participant.participant,
+  interviews: state.interviewlist.interviewlist,
+})
+export default connect(mapStateToProps)(HelloWorld)
