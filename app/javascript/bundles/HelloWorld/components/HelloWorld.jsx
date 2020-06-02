@@ -1,29 +1,24 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { fetchInterviewList } from '../actions/interviewlistActions'
 import {fetchParticipant} from '../actions/participantActions'
 
 const HelloWorld = (props) => {
 
-  // const [participants, setparticipants] = useState([])
-  // const [interviews, setinterviews] = useState([])
 
-  const { dispatch, interviews, participants } = props;
+  // const { dispatch, interviews, participants } = props;
 
-  // useEffect(() => {
-  //   console.log('start')
-  //   fetchParticipantsList();
-  //   fetchInterviewsList();
-  //   console.log('end')
-  // }, []);
+  const participants = useSelector(
+    state => state.participant.participant
+  );
 
-  // console.log('interviewlist',interviews)
-  // console.log('state',state)
-  // console.log('statelist',statelist)
-  // console.log('statepart',statepart)
-  // console.log('participants',participants)
+    
+  const interviews = useSelector (state => state.interviewlist.interviewlist);
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     // const { match: { params: { id } } } = props;
@@ -130,8 +125,10 @@ const HelloWorld = (props) => {
   );
 }
 
-const mapStateToProps = state => ({
-  participants: state.participant.participant,
-  interviews: state.interviewlist.interviewlist,
-})
-export default connect(mapStateToProps)(HelloWorld)
+// const mapStateToProps = state => ({
+//   participants: state.participant.participant,
+//   interviews: state.interviewlist.interviewlist,
+// })
+export default HelloWorld;
+
+// export default connect(mapStateToProps)(HelloWorld)

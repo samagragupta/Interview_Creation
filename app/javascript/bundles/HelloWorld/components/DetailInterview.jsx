@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
+// import { connect } from 'react-redux';
 import {fetchInterview} from '../actions/interviewActions'
 
 const DetailInterview = (props) => {
 
-  const { dispatch, state, stateinterview, loading, interviews, hasErrors } = props;
+  // const { dispatch, state, stateinterview, loading, interviews, hasErrors } = props;
+
+  const interviews = useSelector(
+    state => state.interview.interview
+  );
+  const dispatch = useDispatch()
 
   console.log('state',state);
   console.log('stateinterview',stateinterview);
@@ -60,11 +66,14 @@ const DetailInterview = (props) => {
 
 // export default DetailInterview;
 
-const mapStateToProps = state => ({
-  loading: state.interview.loading,
-  interviews: state.interview.interview,
-  hasErrors: state.interview.hasErrors,
-  state: state,
-  stateinterview: state.interview,
-})
-export default connect(mapStateToProps)(DetailInterview)
+// const mapStateToProps = state => ({
+//   loading: state.interview.loading,
+//   interviews: state.interview.interview,
+//   hasErrors: state.interview.hasErrors,
+//   state: state,
+//   stateinterview: state.interview,
+// })
+// export default connect(mapStateToProps)(DetailInterview)
+
+export default DetailInterview;
+
