@@ -16,7 +16,7 @@ class Api::V1::InterviewsController < ApplicationController
   # end
   def show
     @interview = Interview.find(params[:id])
-    interview_participants = InterviewParticipant.where(interview_id: params[:id])
+    # interview_participants = InterviewParticipant.where(interview_id: params[:id])
     # render json: @interview , include: :interview_participants
     render json: @interview
   end
@@ -55,9 +55,12 @@ class Api::V1::InterviewsController < ApplicationController
     p(participants)
     participant_interviews = []
     participant_interview_times = []
-    participants.each do |participant|
-      participant_interviews+=(InterviewParticipant.where(participant_id: participant))
-    end  
+    # participants.each do |participant|
+    #   participant_interviews+=(InterviewParticipant.where(participant_id: participant))
+    # end
+    participant_interviews=InterviewParticipant.where(participant_id: participants)
+    p(participant_interviews)
+    puts("here")
     participant_interviews.each do |participant_interview|
       puts(participant_interview.interview_id)
       participant_interview_en = Interview.find(participant_interview.interview_id)
@@ -88,7 +91,7 @@ class Api::V1::InterviewsController < ApplicationController
       # redirect_to interview_url(@interview.id)
     else
       
-      redirect_to '/'
+      # redirect_to '/'s
     end
   end
 
