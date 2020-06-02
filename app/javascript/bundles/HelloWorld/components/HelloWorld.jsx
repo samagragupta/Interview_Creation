@@ -1,35 +1,33 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-export default class HelloWorld extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      participants: [],
-      interviews: []
-    };
-  }
+const HelloWorld = () => {
 
-  componentDidMount() {
-    this.fetchParticipantsList();
-    this.fetchInterviewsList();
-  }
+  const [participants, setparticipants] = useState([])
+  const [interviews, setinterviews] = useState([])
+
+  useEffect(() => {
+    console.log('start')
+    fetchParticipantsList();
+    fetchInterviewsList();
+    console.log('end')
+  }, []);
 
 
-  fetchParticipantsList = () => {
-    fetch('/api/v1/participants').
+  async function fetchParticipantsList() {
+    await fetch('/api/v1/participants').
       then((response) => response.json()).
-      then((participants) => this.setState({ participants }));
+      then((participants) => setparticipants( participants ));
   };
 
-  fetchInterviewsList = () => {
+  async function fetchInterviewsList() {
     fetch('/api/v1/interviews').
       then((response) => response.json()).
-      then((interviews) => this.setState({ interviews }));
+      then((interviews) => setinterviews( interviews ));
   };
 
-  handleDelete = (id) => {
+  const handleDelete = (id) => {
     fetch(`/api/v1/interviews/${id}`, { method: 'DELETE' }).
       then((response) => {
         alert('Post deleted successfully')
@@ -37,83 +35,84 @@ export default class HelloWorld extends React.Component {
       });
   }
 
-  render() {
-    const { participants, interviews } = this.state;
-    return (
-      <div>
-        <h3>All participants</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Created at</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              participants.map((participant) => {
-                return (
-                  <tr key={participant.id}>
-                    <td>{participant.name}</td>
-                    <td>
-                      {/* <Link to={`/posts/${post.id}`}> */}
-                      {participant.email}
-                      {/* </Link> */}
-                    </td>
-                    <td>{participant.created_at}</td>
-                    <td>'Yes'</td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </table>
-        <h3>All interviews</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              {/* <th>Is Published</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              interviews.map((interview) => {
-                return (
-                  <tr key={interview.id}>
-                    <td>{interview.start_time}</td>
-                    <td>
-                      {/* <Link to={`/posts/${post.id}`}> */}
-                      {interview.end_time}
-                      {/* </Link> */}
-                    </td>
-                    <td>{interview.created_at}</td>
-                    <td>
-                    <Link to={`/interviews/${interview.id}`}>
+  return (
+    <div>
+      <h3>All participants</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Created at</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            participants.map((participant) => {
+              const {id, name, email, created_at} = participant
+              return (
+                <tr key={id}>
+                  <td>{name}</td>
+                  <td>
+                    {/* <Link to={`/posts/${post.id}`}> */}
+                    {email}
+                    {/* </Link> */}
+                  </td>
+                  <td>{created_at}</td>
+                  <td>'Yes'</td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
+      <h3>All interviews</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            {/* <th>Is Published</th> */}
+          </tr>
+        </thead>
+        <tbody>
+          {
+            interviews.map((interview) => {
+              const {start_time, end_time, created_at, id} = interview
+              return (
+                <tr key={id}>
+                  <td>{start_time}</td>
+                  <td>
+                    {/* <Link to={`/posts/${post.id}`}> */}
+                    {end_time}
+                    {/* </Link> */}
+                  </td>
+                  <td>{created_at}</td>
+                  <td>
+                    <Link to={`/interviews/${id}`}>
                       detail
                     </Link>
-                    </td>
-                    <td>
-                    <Link to={`/editinterview/${interview.id}`}>
+                  </td>
+                  <td>
+                    <Link to={`/editinterview/${id}`}>
                       EDIT
                     </Link>
-                    </td>
-                    <td>
-                    <button onClick={() => this.handleDelete(interview.id) }>
+                  </td>
+                  <td>
+                    <button onClick={() => handleDelete(id)}>
                       Delete
                     </button>
-                    </td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+                  </td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+  );
 }
+
+export default HelloWorld;

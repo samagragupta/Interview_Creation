@@ -1,25 +1,30 @@
-import React from 'react';
-import {Redirect} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 
-export default class CreateParticipant extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      email: '',
-    //   created_at: ''
+const CreateParticipant = () => {
+
+  const [name, setname] = useState([])
+  const [email, setemail] = useState([])
+
+  const handleInputChange = (event) => {
+    if(event.target.name === "name"){
+      setname(event.target.value)
+    }
+    else if(event.target.name === "email"){
+      setemail(event.target.value)
     }
   }
 
-  handleInputChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  }
+  // useEffect(() => {
+  //   createPostRequest();
+  // }, []);
 
-  createPostRequest = (event) => {
-    console.log('this.state', this.state);
-    fetch('/api/v1/participants', {
+  async function createPostRequest(event) {
+    // console.log('this.state', this.state);
+    const statepost = { name, email }
+    await fetch('/api/v1/participants', {
       method: 'post',
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(statepost),
       headers: { 'Content-Type': 'application/json' },
     }).then((response) => {
       alert('Post created successfully');
@@ -27,30 +32,28 @@ export default class CreateParticipant extends React.Component {
     });
   }
 
-  render() {
-    const {name, email, created_at} = this.state;
-    return (
+  return (
+    <div>
+      <h3>New Post</h3>
       <div>
-        <h3>New Post</h3>
-        <div>
-          <label>name: </label>
-          <input
-            type='text'
-            name='name'
-            value={name}
-            onChange={this.handleInputChange}
-            />
-        </div>
-        <div>
-          <label>email: </label>
-          <input
-            type='text'
-            name='email'
-            value={email}
-            onChange={this.handleInputChange}
-            />
-        </div>
-        {/* <div>
+        <label>name: </label>
+        <input
+          type='text'
+          name='name'
+          value={name}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label>email: </label>
+        <input
+          type='text'
+          name='email'
+          value={email}
+          onChange={handleInputChange}
+        />
+      </div>
+      {/* <div>
           <label>created_at: </label>
           <input
             type='text'
@@ -59,8 +62,9 @@ export default class CreateParticipant extends React.Component {
             onChange={this.handleInputChange}
             />
         </div> */}
-        <button onClick={this.createPostRequest}>Create</button>
-      </div>
-    );
-  }
+      <button onClick={createPostRequest}>Create</button>
+    </div>
+  );
 }
+
+export default CreateParticipant;

@@ -1,70 +1,76 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-export default class DetailInterview extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      participants: [],
-      interviews: []
-    };
-  }
+const DetailInterview = (props) => {
+  const [participants, setparticipants] = useState([])
+  const [interviews, setinterviews] = useState([])
 
-  componentDidMount() {
-    this.fetchParticipantsList();
-    this.fetchInterviewsList();
-  }
+  // console.log("part: ", participants);
+  // console.log("interviews: ", interviews);
 
+  useEffect(() => {
+    console.log('start')
+    fetchParticipantsList();
+    fetchInterviewsList();
+    console.log('end')
+  }, []);
 
-  fetchParticipantsList = () => {
-    fetch('/api/v1/participants').
+  async function fetchParticipantsList() {
+    await fetch('/api/v1/participants').
       then((response) => response.json()).
-      then((participants) => this.setState({ participants }));
+      then((participants) => setparticipants({ participants }));
   };
 
-  fetchInterviewsList = () => {
-    const { match: { params: { id } } } = this.props;
-    fetch(`/api/v1/interviews/${id}`).
+  async function fetchInterviewsList() {
+    const { match: { params: { id } } } = props;
+    await fetch(`/api/v1/interviews/${id}`).
       then((response) => response.json()).
-      then((interviews) => this.setState({ interviews }));
+      then((interviews) => setinterviews(interviews));
+
+    console.log("sa", interviews)
   };
 
-  render() {
-    const { participants, interviews } = this.state;
-    return (
-      <div>
-        <h3>All participants</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Is Published</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              interviews.map((interview) => {
-                return (
-                  <tr key={interview.id}>
-                    <td>{interview.id}</td>
-                    <td>{interview.interview_id}</td>
-                    <td>
-                      {/* <Link to={`/posts/${post.id}`}> */}
-                      {interview.participant_id}
-                      {/* </Link> */}
-                    </td>
-                    <td>{interview.created_at}</td>
-                    <td>'Yes No'</td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+  const interviewslist = interviews
+
+  console.log('interview: ', interviews)
+
+  return (
+    <div>
+      <h3>All participants</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Interview id</th>
+            <th>Partcipants id</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            console.log('interviews:sad ', interviews)
+          }
+          {
+            interviews.map((interview) => {
+              console.log('sadassad',interview)
+              console.log('sadaghahhgsghssad',interviews)
+              return (
+                <tr key={interview.id}>
+                  <td>{interview.id}</td>
+                  <td>{interview.interview_id}</td>
+                  <td>
+                    {/* <Link to={`/posts/${post.id}`}> */}
+                    {interview.participant_id}
+                    {/* </Link> */}
+                  </td>
+                  <td>{interview.created_at}</td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+  );
 }
+
+export default DetailInterview;
