@@ -21,7 +21,6 @@ export default class HelloWorld extends React.Component {
   render() {
     return (
       <div>
-        Main hu don ashbdhsaj
       </div>
     );
   }

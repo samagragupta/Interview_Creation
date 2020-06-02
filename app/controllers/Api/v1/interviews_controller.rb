@@ -6,7 +6,7 @@ class Api::V1::InterviewsController < ApplicationController
   # skip_before_filter :verify_authenticity_/token 
   # skip_before_action :verify_authenticity_token
 
-	def index
+  def index
     @interview = Interview.all
     
     render json: @interview
@@ -49,7 +49,7 @@ class Api::V1::InterviewsController < ApplicationController
   
     @start_time =  params[:start_time]
     @end_time =  params[:end_time]
-		participants = params[:participants].split(",")
+	  participants = params[:participants].split(",")
     participant_interviews = []
     participant_interview_times = []
     participants.each do |participant|
@@ -83,9 +83,8 @@ class Api::V1::InterviewsController < ApplicationController
       puts(@pass)
       render json: @interview
       # redirect_to interview_url(@interview.id)
-    else
-      
-      redirect_to '/'
+    else      
+      render json: { render json: @interview.errors, status: :unprocessable_entity }
     end
   end
   

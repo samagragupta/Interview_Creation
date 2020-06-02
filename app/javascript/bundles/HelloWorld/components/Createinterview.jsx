@@ -88,7 +88,8 @@ export default class CreateInterview extends React.Component {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('[name="csrf-token"]').content
                 },
                 body: JSON.stringify(data)
             });
@@ -114,7 +115,7 @@ export default class CreateInterview extends React.Component {
                         type='text'
                         name='participants'
                         value={participants}
-                    onChange={this.handleInputChange}
+                        onChange={this.handleInputChange}
                     />
                 </div>
                 <div>

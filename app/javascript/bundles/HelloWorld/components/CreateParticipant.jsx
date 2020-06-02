@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 export default class CreateParticipant extends React.Component {
   constructor(props) {
@@ -7,7 +7,7 @@ export default class CreateParticipant extends React.Component {
     this.state = {
       name: '',
       email: '',
-    //   created_at: ''
+      //   created_at: ''
     }
   }
 
@@ -20,7 +20,10 @@ export default class CreateParticipant extends React.Component {
     fetch('/api/v1/participants', {
       method: 'post',
       body: JSON.stringify(this.state),
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('[name="csrf-token"]').content
+      },
     }).then((response) => {
       alert('Post created successfully');
       location.href = '/';
@@ -28,7 +31,7 @@ export default class CreateParticipant extends React.Component {
   }
 
   render() {
-    const {name, email, created_at} = this.state;
+    const { name, email, created_at } = this.state;
     return (
       <div>
         <h3>New Post</h3>
@@ -39,7 +42,7 @@ export default class CreateParticipant extends React.Component {
             name='name'
             value={name}
             onChange={this.handleInputChange}
-            />
+          />
         </div>
         <div>
           <label>email: </label>
@@ -48,7 +51,7 @@ export default class CreateParticipant extends React.Component {
             name='email'
             value={email}
             onChange={this.handleInputChange}
-            />
+          />
         </div>
         {/* <div>
           <label>created_at: </label>
