@@ -50,15 +50,16 @@ const HelloWorld = () => {
         <tbody>
           {
             participants.map((participant) => {
+              const {id, name, email, created_at} = participant
               return (
-                <tr key={participant.id}>
-                  <td>{participant.name}</td>
+                <tr key={id}>
+                  <td>{name}</td>
                   <td>
                     {/* <Link to={`/posts/${post.id}`}> */}
-                    {participant.email}
+                    {email}
                     {/* </Link> */}
                   </td>
-                  <td>{participant.created_at}</td>
+                  <td>{created_at}</td>
                   <td>'Yes'</td>
                 </tr>
               )
@@ -79,27 +80,28 @@ const HelloWorld = () => {
         <tbody>
           {
             interviews.map((interview) => {
+              const {start_time, end_time, created_at, id} = interview
               return (
-                <tr key={interview.id}>
-                  <td>{interview.start_time}</td>
+                <tr key={id}>
+                  <td>{start_time}</td>
                   <td>
                     {/* <Link to={`/posts/${post.id}`}> */}
-                    {interview.end_time}
+                    {end_time}
                     {/* </Link> */}
                   </td>
-                  <td>{interview.created_at}</td>
+                  <td>{created_at}</td>
                   <td>
-                    <Link to={`/interviews/${interview.id}`}>
+                    <Link to={`/interviews/${id}`}>
                       detail
                     </Link>
                   </td>
                   <td>
-                    <Link to={`/editinterview/${interview.id}`}>
+                    <Link to={`/editinterview/${id}`}>
                       EDIT
                     </Link>
                   </td>
                   <td>
-                    <button onClick={() => handleDelete(interview.id)}>
+                    <button onClick={() => handleDelete(id)}>
                       Delete
                     </button>
                   </td>
